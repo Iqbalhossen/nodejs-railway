@@ -8,14 +8,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const cookieParser = require('cookie-parser')
 database();
-app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    default: "http://localhost:3000"
-}));
-// app.use(cors({
-//     origin: "http://localhost:3000",
-
-// }));
+app.use(cors());
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
