@@ -11,6 +11,10 @@ var UserLoginsSchema = new mongoose.Schema({
         type:String,
         required:true,
     }, 
+    user_email:{
+        type:String,
+        required:true,
+    }, 
     created_at:{
         type:String,
         default: Date.now,

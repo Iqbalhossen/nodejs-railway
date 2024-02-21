@@ -8,7 +8,7 @@ const { ObjectId } = require('mongodb');
 const WithdrawalView = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = await WithdrawalModels.find({user_id:id});
+        const data = await WithdrawalModels.find({user_id:id}).sort('-Created_At');
         const WithdrawalAcceptSum = await WithdrawalModels.aggregate([
             { $match: { Status: 1, user_id: id } },
             { $group: { _id: {}, sum: { $sum: "$AmountWithVat" } } }
@@ -133,7 +133,6 @@ const WithdrawalStore = async (req, res) => {
             const ChargeAmount = (userAmount - parseFloat(FixedCharge))
 
             const storeData = {
-                user_name: FindUser?.name,
                 user_id: data.GatewayData.data.user_id,
                 GatewayName: data.GatewayData.data.data.Name,
                 Transaction: RandomTransaction(15),
@@ -160,7 +159,6 @@ const WithdrawalStore = async (req, res) => {
             const ChargeAmount = (userAmount - parseFloat((PercentCharge * userAmount) / 100));
 
             const storeData = {
-                user_name: FindUser?.name,
                 user_id: data.GatewayData.data.user_id,
                 GatewayName: data.GatewayData.data.data.Name,
                 Transaction: RandomTransaction(15),
@@ -187,7 +185,6 @@ const WithdrawalStore = async (req, res) => {
         } else {
 
             const storeData = {
-                user_name: FindUser?.name,
                 user_id: data.GatewayData.data.user_id,
                 GatewayName: data.GatewayData.data.data.Name,
                 Transaction: RandomTransaction(15),

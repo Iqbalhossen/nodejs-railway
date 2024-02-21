@@ -197,7 +197,7 @@ const UserMiningHistroy = async (req, res) => {
     try {
 
         const id = req.params.id;
-        const data = await UserMiningModels.find({user_id:id})
+        const data = await UserMiningModels.find({user_id:id}).sort('-createdAt')
         res.status(201).json({
             success: true,
             data: data,

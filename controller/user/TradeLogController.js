@@ -37,6 +37,7 @@ const TradeLogStore = async (req, res) => {
                         replace(/T/, ' ').
                         replace(/\..+/, ''),
                     Symbol: data?.CryptoCurrency?.Symbol,
+                    currency: data?.CryptoCurrency?.currency,
                     Time: thradeSettingData?.Time,
                     Unit: thradeSettingData?.Unit,
                     profit: thradeSettingData?.Profit,
@@ -102,7 +103,7 @@ const TradeLogHistory = async (req, res) => {
 
         const TradeLogSum = parseFloat(`${TradeLogArraySum[0] ? TradeLogArraySum[0].sum : 0}`);
 
-        const TradeLog = await TradeLogModels.find({user_id: id})
+        const TradeLog = await TradeLogModels.find({user_id: id}).sort('-createdAt');
 
         res.status(201).json({
             success: true,
@@ -137,6 +138,22 @@ const TradeLogSingleView = async (req, res) => {
 };
 
 
+const TradeLogLimitView = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await TradeLogModels.find({user_id:id}).sort('-createdAt').limit(10);
+        res.status(201).json({
+            success: true,
+            data,
+           
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 
-module.exports = { TradeLogStore, TradeLogHistory, TradeLogSingleView};
+
+
+module.exports = { TradeLogStore, TradeLogHistory, TradeLogSingleView, TradeLogLimitView};

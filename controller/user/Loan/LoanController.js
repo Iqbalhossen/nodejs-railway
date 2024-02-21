@@ -17,7 +17,7 @@ const UserLoanView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            );
+            ).sort('-createdAt');
         res.status(201).json({
             success: true,
             data: data,
@@ -60,7 +60,7 @@ const UserLoanStore = async (req, res) => {
 const UserLoanHistory = async (req, res) => {
     try {
         const user_id = req.params.id;
-        const data = await LoanModels.find({user_id:user_id})
+        const data = await LoanModels.find({user_id:user_id}).sort('-createdAt')
         res.status(201).json({
             success: true,
             data: data,

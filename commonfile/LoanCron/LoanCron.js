@@ -28,7 +28,6 @@ schedule.scheduleJob("*/10 * * * *", function () {
                     }
                 );
 
-            console.log(data)
 
             for (const singleData of data) {
 
@@ -42,7 +41,6 @@ schedule.scheduleJob("*/10 * * * *", function () {
 
                 if ((parseFloat(findUser?.balance) - parseFloat(interest_amount)) >= 0) {
 
-                    console.log(singleData)
                     const RemingBalanceSum = parseFloat(findUser?.balance) - parseFloat(interest_amount)
                     await userModels.findByIdAndUpdate(query, { balance: RemingBalanceSum }, option);
                     await LoanModels.findByIdAndUpdate(LoanQuery, { status: 3 }, option);

@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 const AdminTransactionsViewByUserId = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = await TransactionsModels.find({user_id:id}).sort('-created_at');
+        const data = await TransactionsModels.find({user_id:id}).sort('-createdAt');
         res.status(201).json({
             success: true,         
             data: data,

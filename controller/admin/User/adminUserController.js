@@ -11,7 +11,7 @@ const { ObjectId } = require('mongodb');
 const AdminAllUserView = async (req, res) => {
 
     try {
-        const data = await UserModels.find().sort('-created_at');
+        const data = await UserModels.find();
         res.status(201).json({
             success: true,
             data: data,

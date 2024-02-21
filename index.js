@@ -9,6 +9,10 @@ const PORT = process.env.PORT || 5000;
 const cookieParser = require('cookie-parser')
 database();
 app.use(cors());
+// app.use(cors({
+//     origin: "http://localhost:3000",
+
+// }));
 app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +52,7 @@ const adminReportRoutes = require('./routes/admin/Report/ReportRoutes');
 const adminFixedDepositRoutes = require('./routes/admin/FixedDeposit/FixedDepositRoutes');
 const adminMiningRoutes = require('./routes/admin/Mining/MiningRoutes');
 const adminLoanRoutes = require('./routes/admin/Loan/LoanRoutes');
+const adminLiveChatsRoutes = require('./routes/admin/LiveChats/LiveChatsRoutes');
 
 
 ///////////// admin route 
@@ -72,6 +77,7 @@ app.use('/api/admin/report', adminReportRoutes);
 app.use('/api/admin/fixed/deposit', adminFixedDepositRoutes);
 app.use('/api/admin/mining', adminMiningRoutes);
 app.use('/api/admin/loan', adminLoanRoutes);
+app.use('/api/admin/live/chat', adminLiveChatsRoutes);
 
 
 
@@ -146,23 +152,23 @@ const io = require("socket.io")(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log(socket.id)
+    // console.log(socket.id)
     socket.on('join_room', (data) => {
-        console.log('join_room : ', data)
+        // console.log('join_room : ', data)
         socket.join(data);
     })
     socket.on('send_message', (data) => {
-        console.log(data)
+        // console.log(data)
 
         // socket.emit('recvice_message',data);
 
         if (data?.recevierId === null) {
             socket.join(data?.senderId);
-            console.log("user Id", data?.senderId)
+            // console.log("user Id", data?.senderId)
             socket.to(data?.senderId).emit("recvice_message", data);
         } else {
             socket.join(data?.recevierId);
-            console.log("admin Id", data?.senderId)
+            // console.log("admin Id", data?.senderId)
             socket.to(data?.recevierId).emit("recvice_message", data);
         }
 

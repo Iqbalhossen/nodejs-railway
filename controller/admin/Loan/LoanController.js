@@ -2,7 +2,7 @@ const LoanModels = require('../../../models/Loan/LoanModels');
 const userModels = require('../../../models/userModels');
 const { ObjectId } = require('mongodb');
 const { TransactionsLoan } = require('../../../commonfile/Transactions/Transactions');
-var moment = require('moment');
+let moment = require('moment');
 
 const AdminLoanPendingView = async (req, res) => {
     try {
@@ -86,7 +86,56 @@ const AdminLoanReject = async (req, res) => {
     }
 };
 
+ 
+
+const AdminLoanApprovedView = async (req, res) => {
+    try {
+
+        const data = await LoanModels.find({ status: 1 });
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 
 
-module.exports = {AdminLoanPendingView, AdminLoanAccept, AdminLoanSingleView, AdminLoanReject  };
+const AdminLoanRejectView = async (req, res) => {
+    try {
+
+        const data = await LoanModels.find({ status: 2 });
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const AdminLoanCompletedView = async (req, res) => {
+    try {
+
+        const data = await LoanModels.find({ status: 3 });
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+module.exports = {AdminLoanPendingView, AdminLoanAccept, AdminLoanSingleView, AdminLoanReject, AdminLoanRejectView, AdminLoanApprovedView, AdminLoanCompletedView  };

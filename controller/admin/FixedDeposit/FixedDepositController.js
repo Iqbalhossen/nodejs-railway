@@ -1,4 +1,5 @@
 const FixedDepositModels = require('../../../models/FixedDeposit/FixedDepositModels');
+const UserFixedDeposit = require('../../../models/UserFixedDeposit/UserFixedDeposit');
 
 const { ObjectId } = require('mongodb');
 var moment = require('moment');
@@ -19,7 +20,7 @@ const AdminFixedDepositView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            );
+            ).sort('-createdAt');
         res.status(201).json({
             success: true,
             data: data,
@@ -206,4 +207,117 @@ const AdminFixedDepositDelete = async (req, res) => {
 };
 
 
-module.exports = { AdminFixedDepositView, AdminFixedDepositStore, AdminFixedDepositSingleView, AdminFixedDepositUpdate, AdminFixedDepositDelete };
+const AdminFixedDepositExpiredView = async (req, res) => {
+    try {
+
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY');
+
+        const data = await FixedDepositModels.find
+            (
+                {
+                    expired_time: {
+                        $lte: findDate,
+                    }
+                }
+            ).sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const AdminFixedDepositAllView = async (req, res) => {
+    try {
+        const data = await FixedDepositModels.find().sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const AdminUserFixedDepositRunningView = async (req, res) => {
+    try {
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
+
+        const data = await UserFixedDeposit.find
+            (
+                {
+                    expired_time: {
+                        $gte: findDate,
+                        // $lte: "2021-02-15",
+                    }
+                }
+            ).sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const AdminUserFixedDepositCompleteView = async (req, res) => {
+    try {
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
+
+        const data = await UserFixedDeposit.find
+            (
+                {
+                    expired_time: {
+                        $lte: findDate,
+                        // $lte: "2021-02-15",
+                    }
+                }
+            ).sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const AdminUserFixedDepositAllView = async (req, res) => {
+    try {
+
+        const data = await UserFixedDeposit.find().sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+module.exports = { AdminFixedDepositView, AdminFixedDepositStore, AdminFixedDepositSingleView, AdminFixedDepositUpdate, AdminFixedDepositDelete, AdminFixedDepositExpiredView, AdminFixedDepositAllView, AdminUserFixedDepositRunningView, AdminUserFixedDepositCompleteView, AdminUserFixedDepositAllView };

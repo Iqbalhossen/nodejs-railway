@@ -19,7 +19,7 @@ const UserFixedDepositView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            );
+            ).sort('-createdAt');
         res.status(201).json({
             success: true,
             data: data,
@@ -133,7 +133,7 @@ const UserFixedDepositStoreView = async (req, res) => {
     try {
         const id = req.params.id;
       
-        const data = await UserFixedDeposit.find({user_id: id});
+        const data = await UserFixedDeposit.find({user_id: id}).sort('-createdAt');
     
         res.status(201).json({
             success: true,

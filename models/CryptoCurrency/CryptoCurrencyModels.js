@@ -12,6 +12,11 @@ var CryptoCurrencySchema = new mongoose.Schema({
         required:true,
          
     },
+    currency:{
+        type:String,
+        required:true,
+         
+    },
     image:{
         type:String,         
     },

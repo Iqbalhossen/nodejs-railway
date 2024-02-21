@@ -73,7 +73,6 @@ const UserManualGatewaysDeposit = async (req, res) => {
         if (FixedCharge > 0 && PercentCharge <= 0) {
 
             const storeData = {
-                user_name: FindUser.name,
                 user_id: data.user_id,
                 GatewayName: data.GatewayData.GatewayName,
                 Transaction: RandomTransaction(15),
@@ -99,7 +98,6 @@ const UserManualGatewaysDeposit = async (req, res) => {
             const ChargeAmount = ((PercentCharge * userAmount ) / 100)
 
             const storeData = {
-                user_name: FindUser.name,
                 user_id: data.user_id,
                 GatewayName: data.GatewayData.GatewayName,
                 Transaction: RandomTransaction(15),
@@ -121,7 +119,6 @@ const UserManualGatewaysDeposit = async (req, res) => {
         } else {  ///// without charge area   ////////
 
             const storeData = {
-                user_name: FindUser.name,
                 user_id: data.user_id,
                 GatewayName: data.GatewayData.GatewayName,
                 Transaction: RandomTransaction(15),
@@ -150,7 +147,7 @@ const UserManualGatewaysDeposit = async (req, res) => {
 const UserManualGatewaysDepositView = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = await DepositModelsModels.find({ user_id: id });
+        const data = await DepositModelsModels.find({ user_id: id }).sort('-Created_At');
         res.status(201).json({
             success: true,
             data: data,

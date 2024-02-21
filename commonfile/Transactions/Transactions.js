@@ -15,15 +15,14 @@ const TransactionsDeposit = async (data) => {
         const userBalance = parseFloat(parseFloat(userFind.balance) + parseFloat(Amount)).toFixed(2);
         await userModels.findByIdAndUpdate(query, { balance: userBalance }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
-
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
         if (ExitsData === null) {
-            const StoreData = { user_name: userFind.name, user_id: userFind._id, amount: AmountWithVat, charge: (parseFloat(AmountWithVat) - parseFloat(Amount)), post_balance: Amount, trx_type: '+', trx: Transaction, details: `Deposit Via ${GatewayName}`, remark: 'deposit' }
+            const StoreData = {  user_id: userFind._id, amount: AmountWithVat, charge: (parseFloat(AmountWithVat) - parseFloat(Amount)), post_balance: Amount, trx_type: '+', trx: Transaction, details: `Deposit Via ${GatewayName}`, remark: 'deposit' }
             await TransactionsModels.create(StoreData);
 
         } else {
 
-            const StoreData = { user_name: userFind.name, user_id: userFind._id, amount: AmountWithVat, charge: (parseFloat(AmountWithVat) - parseFloat(Amount)), post_balance: (parseFloat(Amount) + parseFloat(ExitsData.post_balance)), trx_type: '+', trx: Transaction, details: `Deposit Via ${GatewayName}`, remark: 'deposit' }
+            const StoreData = {  user_id: userFind._id, amount: AmountWithVat, charge: (parseFloat(AmountWithVat) - parseFloat(Amount)), post_balance: (parseFloat(Amount) + parseFloat(ExitsData.post_balance)), trx_type: '+', trx: Transaction, details: `Deposit Via ${GatewayName}`, remark: 'deposit' }
             await TransactionsModels.create(StoreData);
 
         }
@@ -46,7 +45,7 @@ const TransactionsWithdrawal = async (data) => {
         const userBalance = parseFloat(parseFloat(userFind.balance) - parseFloat(AmountWithVat)).toFixed(2);
         await userModels.findByIdAndUpdate(query, { balance: userBalance }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         if (ExitsData === null) {
             const StoreData = { user_id: userFind._id, amount: AmountWithVat, charge: (parseFloat(AmountWithVat) - parseFloat(Amount)), post_balance: -AmountWithVat, trx_type: '-', trx: Transaction, details: `Withdraw Via ${GatewayName}`, remark: 'withdrawal' }
@@ -89,7 +88,7 @@ const TransactionsWithdrawalReject = async (data) => {
         const userBalance = parseFloat(parseFloat(userFind.balance) + parseFloat(AmountWithVat)).toFixed(2);
         await userModels.findByIdAndUpdate(query, { balance: userBalance }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         if (ExitsData === null) {
             const StoreData = { user_name: userFind.name, user_id: userFind._id, amount: AmountWithVat, charge: 0, post_balance: AmountWithVat, trx_type: '+', trx: RandomTransaction(15), details: `${AmountWithVat} USD Refunded from withdrawal rejection`, remark: 'withdraw_reject' }
@@ -118,7 +117,7 @@ const TransactionsTradeLog = async (RemingBalanceSum, data, UserData) => {
 
         await userModels.findByIdAndUpdate(query, { balance: RemingBalanceSum }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         function RandomTransaction(length) {
             let result = '';
@@ -163,7 +162,7 @@ const TransactionsTradeLogResults = async (TradeData, userAmount, result) => {
 
         await userModels.findByIdAndUpdate(query, { balance: RemingBalanceSum }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         function RandomTransaction(length) {
             let result = '';
@@ -208,7 +207,7 @@ const TransactionsFixedDeposit = async (User, FixedDepositData,) => {
 
         await userModels.findByIdAndUpdate(query, { balance: RemingBalanceSum }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         function RandomTransaction(length) {
             let result = '';
@@ -253,7 +252,7 @@ const TransactionsMining = async (User, MiningData,) => {
 
         await userModels.findByIdAndUpdate(query, { balance: RemingBalanceSum }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         function RandomTransaction(length) {
             let result = '';
@@ -298,7 +297,7 @@ const TransactionsLoan = async (data) => {
 
         await userModels.findByIdAndUpdate(query, { balance: RemingBalanceSum }, option);
 
-        const ExitsData = await TransactionsModels.findOne().sort('-created_at');
+        const ExitsData = await TransactionsModels.findOne().sort('-createdAt');
 
         function RandomTransaction(length) {
             let result = '';

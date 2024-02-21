@@ -12,7 +12,7 @@ const { adminSendForgetPasswordEmail } = require('../../../commonfile/email/User
 const AdminRoleView = async (req, res) => {
     try {
 
-        const data = await AdminModels.find();
+        const data = await AdminModels.find().sort('-created_at');
         res.status(201).json({
             success: true,
             data: data,

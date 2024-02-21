@@ -39,6 +39,9 @@ var TradeLogSchema = new mongoose.Schema({
     Symbol:{
         type:String,
     },
+    currency:{
+        type:String,
+    },
     Time:{
         type:Number,
     },
@@ -49,6 +52,8 @@ var TradeLogSchema = new mongoose.Schema({
         type:Number,
     },
 
-});
+},
+{ timestamps: true }
+);
 
 module.exports = mongoose.model('TradeLog', TradeLogSchema);

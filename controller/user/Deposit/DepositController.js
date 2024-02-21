@@ -9,7 +9,7 @@ const UserDepositAllView = async (req, res) => {
     try {
         const user_id = req.params.user_id;
 
-        const UserDepositData = await DepositModels.find({ user_id: user_id });
+        const UserDepositData = await DepositModels.find({ user_id: user_id }).sort('-Created_At');
 
         res.status(201).json({
             success: true,

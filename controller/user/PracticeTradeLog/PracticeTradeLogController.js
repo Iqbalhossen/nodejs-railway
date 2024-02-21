@@ -37,6 +37,7 @@ const PracticeTradeLogStore = async (req, res) => {
                         replace(/T/, ' ').
                         replace(/\..+/, ''),
                     Symbol: data?.CryptoCurrency?.Symbol,
+                    currency: data?.CryptoCurrency?.currency,
                     Time: thradeSettingData?.Time,
                     Unit: thradeSettingData?.Unit,
                     profit: thradeSettingData?.Profit,
@@ -101,7 +102,7 @@ const PracticeTradeLogHistory = async (req, res) => {
 
         const TradeLogSum = parseFloat(`${TradeLogArraySum[0] ? TradeLogArraySum[0].sum : 0}`);
 
-        const TradeLog = await PracticeTradeLogModels.find({ user_id: id })
+        const TradeLog = await PracticeTradeLogModels.find({ user_id: id }).sort('-createdAt');
 
         res.status(201).json({
             success: true,

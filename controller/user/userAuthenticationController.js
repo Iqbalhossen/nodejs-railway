@@ -164,7 +164,7 @@ const UserSignupPassword = async (req, res) => {
 const UserLogin = async (req, res) => {
     try {
         const data = req.body;
-        console.log(data)
+      
         if (data.password === undefined && data.email === undefined) {
             return res.status(400).json({
                 success: false,
@@ -183,8 +183,6 @@ const UserLogin = async (req, res) => {
                 message: "password field is required",
             });
         }
-
-
 
         const existsEmail = await User.findOne({ email: data.email });
 
@@ -208,16 +206,16 @@ const UserLogin = async (req, res) => {
                     user_id: existsEmail._id,
                 },
                     'secret',
-                    { expiresIn: '1h' }
+                     { expiresIn: '1h' }
                 );
 
-                const storeData = { user_name: `${existspassword.lname} ${existspassword.fname}`, user_id: existspassword._id }
+                const storeData = { user_name: `${existspassword.lname} ${existspassword.fname}`, user_id: existspassword?._id, user_email: existspassword?.email }
                 await UserLoginsModels.create(storeData);
 
                 res.status(201).json({
                     success: true,
                     message: "Login successful",
-                    data: existsEmail,
+                    data: storeData,
                     token: token,
                 });
 

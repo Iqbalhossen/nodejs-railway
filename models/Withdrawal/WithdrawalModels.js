@@ -2,11 +2,6 @@
 const mongoose = require('mongoose'); // Erase if already required
 
 var WithdrawalSchema = new mongoose.Schema({
-    user_name:{
-        type:String,
-        required:true,
-         
-    }, 
     user_id:{
         type:String,
         required:true,

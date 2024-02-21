@@ -6,7 +6,7 @@ const { ObjectId } = require('mongodb');
 const AdminCryptoCurrencyView = async (req, res) => {
     try {
 
-        const data = await CryptoCurrencyModels.find();
+        const data = await CryptoCurrencyModels.find().sort('-created_at');
         res.status(201).json({
             success: true,
             data: data,
@@ -23,6 +23,11 @@ const AdminCryptoCurrencyView = async (req, res) => {
 const AdminCryptoCurrencyAdd = async (req, res) => {
     try {
         const data = req.body;
+        const name = data?.Name;
+        const symbol= (data?.Symbol).toUpperCase();
+        const currency= (data?.currency).toUpperCase();
+        console.log(symbol)
+        console.log(currency)
         fs.access('./public/data/uploads/', (err) => {
             if (err) {
                 fs.mkdirSync('./public/data/uploads/')
@@ -32,11 +37,11 @@ const AdminCryptoCurrencyAdd = async (req, res) => {
         const fileName = `${Date.now()}-${formatedName}`
         await sharp(req.file.buffer).resize(400, 400, { kernel: sharp.kernel.nearest }).toFile(`./public/data/uploads/${fileName}`);
 
-        const storeData = { ...data, image: `public/data/uploads/${fileName}`, Status: 1 }
+        const storeData = { Name: name, Symbol: symbol, currency: currency, image: `public/data/uploads/${fileName}`, Status: 1 }
         const results = await CryptoCurrencyModels.create(storeData);
         res.status(201).json({
             success: true,
-            message: "Manual Gateways  add successfull",
+            message: "Crypto Currency  add successfull",
             data: storeData,
         });
 

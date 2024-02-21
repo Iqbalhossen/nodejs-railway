@@ -114,6 +114,26 @@ var AdminSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    fixed_deposit:{
+        type:Boolean,
+        default:false,
+    },
+    mining:{
+        type:Boolean,
+        default:false,
+    },
+    loan:{
+        type:Boolean,
+        default:false,
+    },
+    social_support:{
+        type:Boolean,
+        default:false,
+    },
+    live_chat:{
+        type:Boolean,
+        default:false,
+    },
     created_at:{
         type:String,
     },

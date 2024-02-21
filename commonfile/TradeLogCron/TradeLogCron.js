@@ -17,7 +17,7 @@ schedule.scheduleJob("*/01 * * * * *", function () {
       // console.log(`running a task every 1 second ${cronTime}`)
 
       for (const TradeData of data) {
-        const url = `https://api.exchange.coinbase.com/products/${TradeData?.Crypto}-USD/trades`;
+        const url = `https://api.exchange.coinbase.com/products/${TradeData?.Crypto}-${TradeData?.currency}/trades`;
 
         const apiCall = async () => {
           await fetch(url)

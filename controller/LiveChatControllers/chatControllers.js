@@ -1,6 +1,7 @@
 const ConversationModel = require('../../models/Chat/ConversationModel');
 const MessageModels = require('../../models/Chat/Message');
-
+const { AdminLiveChatEmail } = require('../../commonfile/email/LiveChatEmail');
+const { ObjectId } = require('mongodb');
 
 const AdminConversationView = async (req, res) => {
   try {
@@ -40,7 +41,26 @@ const MessageSend = async (req, res) => {
     const ExitsConversationData = await ConversationModel.findOne({ userId: id, });
 
     if (data?.recevierId === undefined) {
+      
       if (ExitsConversationData) {
+        if (ExitsConversationData?.status === 2) {
+          const query = { _id: new ObjectId(ExitsConversationData?._id) };
+          const option = { upsert: true };
+          
+           await ConversationModel.findByIdAndUpdate(query, { status: 0 }, option);
+          ///////////email send admin
+          AdminLiveChatEmail(ExitsConversationData);
+          ///////////email send admin end
+
+        } else {
+          ///////////email send admin
+          if (ExitsConversationData?.status === 0) {
+            AdminLiveChatEmail(ExitsConversationData);
+          }
+          ///////////email send admin end
+
+        }
+
         const MessageData = await MessageModels.create({ conversationId: ExitsConversationData?._id, senderId: id, message: data?.message });
         res.status(201).json({
           success: true,
@@ -50,6 +70,9 @@ const MessageSend = async (req, res) => {
       } else {
         const ConversationData = await ConversationModel.create({ userId: id, });
         if (ConversationData) {
+          ///////////email send admin
+          AdminLiveChatEmail(ConversationData);
+          ///////////email send admin end
           const MessageData = await MessageModels.create({ conversationId: ConversationData?._id, senderId: id, message: data?.message });
           res.status(201).json({
             success: true,
@@ -63,6 +86,22 @@ const MessageSend = async (req, res) => {
     } else {
 
       if (ExitsConversationData) {
+        if (ExitsConversationData?.status === 2) {
+          const query = { _id: new ObjectId(ExitsConversationData?._id) };
+          const option = { upsert: true };
+           await ConversationModel.findByIdAndUpdate(query, { status: 0 }, option);
+          ///////////email send admin
+          AdminLiveChatEmail(ExitsConversationData);
+          ///////////email send admin end
+
+        } else {
+          ///////////email send admin
+          if (ExitsConversationData?.status === 0) {
+            AdminLiveChatEmail(ExitsConversationData);
+          }
+          ///////////email send admin end
+
+        }
         const MessageData = await MessageModels.create({ conversationId: ExitsConversationData?._id, senderId: data?.senderId, message: data?.message, recevierId: data?.recevierId });
         res.status(201).json({
           success: true,
@@ -72,6 +111,7 @@ const MessageSend = async (req, res) => {
       } else {
         const ConversationData = await ConversationModel.create({ userId: id, });
         if (ConversationData) {
+          AdminLiveChatEmail(ConversationData);
           const MessageData = await MessageModels.create({ conversationId: ConversationData?._id, senderId: data?.senderId, message: data?.message, recevierId: data?.recevierId });
           res.status(201).json({
             success: true,

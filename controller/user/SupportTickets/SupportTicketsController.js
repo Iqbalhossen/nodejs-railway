@@ -120,7 +120,7 @@ const UserSupportTicketsMessageView = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const results = await SupportMessagesModels.find({support_ticket_id:id});
+        const results = await SupportMessagesModels.find({support_ticket_id:id}).sort('-created_at');
 
         res.status(201).json({
             success: true,

@@ -1,4 +1,5 @@
 const MiningModels = require('../../../models/Mining/MiningModels');
+const UserMiningModels = require('../../../models/UserMining/UserMiningModels');
 
 const { ObjectId } = require('mongodb');
 var moment = require('moment');
@@ -206,4 +207,121 @@ const AdminMiningDelete = async (req, res) => {
 };
 
 
-module.exports = { AdminMiningView, AdminMiningStore, AdminMiningSingleView, AdminMiningUpdate, AdminMiningDelete };
+
+
+const AdminMiningExpiredView = async (req, res) => {
+    try {
+
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY');
+
+        const data = await MiningModels.find
+            (
+                {
+                    expired_time: {
+                        $lte: findDate,
+                    }
+                }
+            ).sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const AdminMiningAllView = async (req, res) => {
+    try {
+
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY');
+
+        const data = await MiningModels.find().sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const AdminUserMiningRunningView = async (req, res) => {
+    try {
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
+
+        const data = await UserMiningModels.find
+            (
+                {
+                    expired_time: {
+                        $gte: findDate,
+                        // $lte: "2021-02-15",
+                    }
+                }
+            ).sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const AdminUserMiningCompleteView = async (req, res) => {
+    try {
+        const timeObject = new Date();
+        const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
+
+        const data = await UserMiningModels.find
+            (
+                {
+                    expired_time: {
+                        $lte: findDate,
+                    }
+                }
+            ).sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const AdminUserMiningAllView = async (req, res) => {
+    try {
+
+        const data = await UserMiningModels.find().sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+module.exports = { AdminMiningView, AdminMiningStore, AdminMiningSingleView, AdminMiningUpdate, AdminMiningDelete, AdminMiningExpiredView, AdminMiningAllView, AdminUserMiningRunningView, AdminUserMiningCompleteView, AdminUserMiningAllView };
