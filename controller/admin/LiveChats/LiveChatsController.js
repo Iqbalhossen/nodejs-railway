@@ -4,6 +4,37 @@ const userModels = require('../../../models/userModels');
 const { ObjectId } = require('mongodb');
 
 
+const AdminAllConversationView = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await ConversationModel.find().sort('-createdAt');
+        res.status(201).json({
+            success: true,
+            data,
+           
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const AdminConversationMessageView = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = await MessageModels.find({conversationId:id});
+        res.status(201).json({
+            success: true,
+            data,
+           
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
 const AdminConversationView = async (req, res) => {
     try {
         const { id } = req.params;
@@ -108,4 +139,4 @@ const AdminCloseChating = async (req, res) => {
 
 
 
-module.exports = {AdminConversationView, AdminPendingLiveChatView, AdminSingleLiveChatView, AdminSingleMessageView, AdminApprovedChating, AdminCloseChating};
+module.exports = {AdminConversationView, AdminPendingLiveChatView, AdminSingleLiveChatView, AdminSingleMessageView, AdminApprovedChating, AdminCloseChating, AdminAllConversationView, AdminConversationMessageView};

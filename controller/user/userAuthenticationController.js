@@ -147,11 +147,16 @@ const UserSignupPassword = async (req, res) => {
         const userData = { fname: data.fname, lname: data.lname, email: data.email, password: data.password, is_verified: true, status: 0, created_at: new Date() }
         const results = await User.create(userData);
 
-        res.status(201).json({
-            success: true,
-            message: "signup successfull",
-            data: results,
-        });
+        if(results){
+            const signupData = { user_name: `${results.lname} ${results.fname}`, user_id: results?._id, user_email: results?.email }
+            res.status(201).json({
+                success: true,
+                message: "signup successfull",
+                data: signupData,
+            });
+        }
+ 
+       
 
     } catch (error) {
         console.log(error);

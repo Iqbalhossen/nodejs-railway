@@ -39,7 +39,6 @@ const MessageSend = async (req, res) => {
     const email = req.params.id;
     const data = req.body;
     const ExitsConversationData = await ConversationModel.findOne({ user_email: email, });
-console.log(data)
     if (data?.message === undefined) {
       if (ExitsConversationData) {
         res.status(201).json({

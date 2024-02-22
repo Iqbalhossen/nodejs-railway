@@ -145,8 +145,8 @@ const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
         // origin: "http://localhost:3000",
-        origin: ["https://gffex.xyz", "https://xenodochial-morning-90071.pktriot.net"],
-        default: "https://gffex.xyz"
+        origin: ["http://localhost:3000", "http://localhost:3001"],
+        default: "http://localhost:3000"
         // credentials: true,
     },
 });
