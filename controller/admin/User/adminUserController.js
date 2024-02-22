@@ -39,6 +39,21 @@ const AdminUserViewById = async (req, res) => {
     }
 }; 
 
+const AdminUserViewByEmail = async (req, res) => {
+
+    try {
+        const email = req.params.id;
+        const data = await UserModels.findOne({email:email});
+        res.status(201).json({
+            success: true,
+            data: data,
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+}; 
+
 const AdminUserBanned = async (req, res) => {
 
     try {
@@ -336,4 +351,4 @@ const AdminUserLoginHistory = async (req, res) => {
 
 
 
-module.exports = { AdminAllUserView, AdminUserViewById, AdminUserBanned, AdminUseEmailUnverify, AdminUseHistoryDetails, AdminUserBalanceAdd, AdminUserBalanceSubtract, AdminUserUpdateById, AdminUseMobileUnverify, AdminUseKYCUnverify, AdminUseWithBalance, AdminUseKYCPending, AdminUserBannedByID, AdminUserLoginHistory };
+module.exports = { AdminAllUserView, AdminUserViewById, AdminUserBanned, AdminUseEmailUnverify, AdminUseHistoryDetails, AdminUserBalanceAdd, AdminUserBalanceSubtract, AdminUserUpdateById, AdminUseMobileUnverify, AdminUseKYCUnverify, AdminUseWithBalance, AdminUseKYCPending, AdminUserBannedByID, AdminUserLoginHistory, AdminUserViewByEmail };

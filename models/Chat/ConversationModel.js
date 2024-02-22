@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 
 const conversationSchema = mongoose.Schema({
-    userId: {
+    fname: {
+        type: String,
+        default: null,
+    },
+    lname: {
+        type: String,
+        default: null,
+    },
+    user_email: {
         type: String,
         default: null,
     },

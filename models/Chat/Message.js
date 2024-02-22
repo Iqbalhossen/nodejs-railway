@@ -4,11 +4,11 @@ const messageSchema = mongoose.Schema({
     conversationId: {
         type: String,
         default: null,
+    }, 
+    sender_email: {
+        type: String 
     },
-    senderId: {
-        type: String
-    },
-    recevierId: {
+    recevier_email: {
         type: String,
         default: null,
     },

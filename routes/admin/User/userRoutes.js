@@ -1,11 +1,12 @@
 const express = require('express')
 const route = express.Router();
 
-const {AdminAllUserView, AdminUserViewById, AdminUserBanned, AdminUseEmailUnverify, AdminUseHistoryDetails, AdminUserBalanceAdd, AdminUserBalanceSubtract, AdminUserUpdateById, AdminUseMobileUnverify, AdminUseKYCUnverify, AdminUseWithBalance, AdminUseKYCPending, AdminUserBannedByID, AdminUserLoginHistory} = require('../../../controller/admin/User/adminUserController');
+const {AdminAllUserView, AdminUserViewById, AdminUserBanned, AdminUseEmailUnverify, AdminUseHistoryDetails, AdminUserBalanceAdd, AdminUserBalanceSubtract, AdminUserUpdateById, AdminUseMobileUnverify, AdminUseKYCUnverify, AdminUseWithBalance, AdminUseKYCPending, AdminUserBannedByID, AdminUserLoginHistory,AdminUserViewByEmail} = require('../../../controller/admin/User/adminUserController');
 
 // Thrade App Store section 
 route.get('/all',  AdminAllUserView);
 route.get('/single/:id',  AdminUserViewById);
+route.get('/single/email/:id',  AdminUserViewByEmail);
 route.get('/banned',  AdminUserBanned);
 route.put('/banned/:id',  AdminUserBannedByID);
 route.get('/unverify/email',  AdminUseEmailUnverify);

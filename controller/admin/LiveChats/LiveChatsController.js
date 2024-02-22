@@ -64,7 +64,7 @@ const AdminSingleMessageView = async (req, res) => {
         console.log(error);
     }
 };
-
+ 
 const AdminApprovedChating = async (req, res) => {
     try {
         const { id, adminId } = req.params;
