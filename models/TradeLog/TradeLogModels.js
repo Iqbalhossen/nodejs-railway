@@ -32,6 +32,7 @@ var TradeLogSchema = new mongoose.Schema({
     },
     Status:{
         type:Number,
+        default:0,
     },
     OutTime:{
         type:Date,

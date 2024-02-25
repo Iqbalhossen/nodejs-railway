@@ -30,7 +30,9 @@ var MenuPageSchema = new mongoose.Schema({
     update_at:{
         type:String,
     },
-});
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model('MenuPageModel', MenuPageSchema);

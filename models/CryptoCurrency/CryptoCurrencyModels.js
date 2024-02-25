@@ -31,7 +31,9 @@ var CryptoCurrencySchema = new mongoose.Schema({
          
     },
     
-});
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model('CryptoCurrency', CryptoCurrencySchema);

@@ -1,5 +1,5 @@
 const ManualGatewaysModels = require('../../../models/PaymentGateways/ManualGateways');
-const DepositModelsModels = require('../../../models/Deposit/DepositModels');
+const DepositModels = require('../../../models/Deposit/DepositModels');
 const UserModels = require('../../../models/userModels');
 const sharp = require('sharp');
 const fs = require('fs');
@@ -84,7 +84,7 @@ const UserManualGatewaysDeposit = async (req, res) => {
                 Status: 0,
             }
 
-            await DepositModelsModels.create(storeData);
+            await DepositModels.create(storeData);
             res.status(201).json({
                 success: true,
                 message: `Deposit Pending`,
@@ -108,7 +108,7 @@ const UserManualGatewaysDeposit = async (req, res) => {
                 NetworkType: 'ERC20',
                 Status: 0,
             }
-            await DepositModelsModels.create(storeData);
+            await DepositModels.create(storeData);
             res.status(201).json({
                 success: true,
                 message: `Deposit Pending`,
@@ -130,7 +130,7 @@ const UserManualGatewaysDeposit = async (req, res) => {
                 Status: 0,
             }
 
-            await DepositModelsModels.create(storeData);
+            await DepositModels.create(storeData);
             res.status(201).json({
                 success: true,
                 message: `Deposit Pending`,
@@ -146,11 +146,23 @@ const UserManualGatewaysDeposit = async (req, res) => {
 };
 const UserManualGatewaysDepositView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const id = req.params.id;
-        const data = await DepositModelsModels.find({ user_id: id }).sort('-Created_At');
+        const data = await DepositModels.find({ user_id: id }).sort('-createdAt').skip(skip).limit(limit);
+       const dataLength = await DepositModels.find({ user_id: id });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
     } catch (error) {

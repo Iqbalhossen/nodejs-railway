@@ -20,7 +20,9 @@ var UserLoginsSchema = new mongoose.Schema({
         default: Date.now,
     },
    
-});
+},
+{ timestamps: true }
+);
 
 //Export the model
 module.exports = mongoose.model('UserLogins', UserLoginsSchema);

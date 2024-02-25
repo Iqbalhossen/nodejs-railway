@@ -11,11 +11,24 @@ const { ObjectId } = require('mongodb');
 const AdminSupportTicketsPending = async (req, res) => {
     try {
 
-        const SupportTickets = await SupportTicketsModels.find({ status: 0 }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await SupportTicketsModels.find({ status: 0 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await SupportTicketsModels.find({ status: 0 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: SupportTickets,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
     } catch (error) {
         console.log(error);
     }
@@ -145,11 +158,24 @@ const AdminSupportTicketsClose = async (req, res) => {
 
 const AdminSupportTicketsCloseView = async (req, res) => {
     try {
-        const data = await SupportTicketsModels.find({ status: 3 }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await SupportTicketsModels.find({ status: 3 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await SupportTicketsModels.find({ status: 3 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
     } catch (error) {
         console.log(error);
     }
@@ -159,11 +185,24 @@ const AdminSupportTicketsCloseView = async (req, res) => {
 
 const AdminSupportTicketsAnsweredView = async (req, res) => {
     try {
-        const data = await SupportTicketsModels.find({ status: 1 }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await SupportTicketsModels.find({ status: 1 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await SupportTicketsModels.find({ status: 1 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
     } catch (error) {
         console.log(error);
     }
@@ -172,11 +211,24 @@ const AdminSupportTicketsAnsweredView = async (req, res) => {
 
 const AdminSupportTicketsAllView = async (req, res) => {
     try {
-        const data = await SupportTicketsModels.find().sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await SupportTicketsModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await SupportTicketsModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
     } catch (error) {
         console.log(error);
     }

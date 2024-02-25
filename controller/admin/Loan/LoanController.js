@@ -6,13 +6,24 @@ let moment = require('moment');
 
 const AdminLoanPendingView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
 
-        const data = await LoanModels.find({ status: 0 });
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await LoanModels.find({ status: 0 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await LoanModels.find({ status: 0 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
 
     } catch (error) {
@@ -91,12 +102,24 @@ const AdminLoanReject = async (req, res) => {
 const AdminLoanApprovedView = async (req, res) => {
     try {
 
-        const data = await LoanModels.find({ status: 1 });
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await LoanModels.find({ status: 1 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await LoanModels.find({ status: 1 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
 
     } catch (error) {
@@ -109,12 +132,24 @@ const AdminLoanApprovedView = async (req, res) => {
 const AdminLoanRejectView = async (req, res) => {
     try {
 
-        const data = await LoanModels.find({ status: 2 });
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await LoanModels.find({ status: 2 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await LoanModels.find({ status: 2 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
 
     } catch (error) {
@@ -125,14 +160,24 @@ const AdminLoanRejectView = async (req, res) => {
 const AdminLoanCompletedView = async (req, res) => {
     try {
 
-        const data = await LoanModels.find({ status: 3 });
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await LoanModels.find({ status: 3 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await LoanModels.find({ status: 3 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
-
+ 
     } catch (error) {
         console.log(error);
     }

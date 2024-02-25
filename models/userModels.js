@@ -116,52 +116,9 @@ var userSchema = new mongoose.Schema({
         type:String,
     },
    
-});
+},
+{ timestamps: true }
+);
 
 //Export the model
 module.exports = mongoose.model('User', userSchema);
-
-
-
-
-
-
-
-
-///////    user data
-
-
-// 2	staff_id	
-// 3	firstname	
-// 4	lastname	
-// 5	username 
-// 6	email 
-// 7	country_code	
-// 8	mobile	
-// 9	ref_by	
-// 10	balance		
-// 11	demo_balance	
-// 12	first_profit		
-// 13	second_profit	
-// 14	third_profit		
-// 15	fourth_profit		
-// 16	trading_type		
-// 17	password	
-// 18	plain_password	
-// 19	address	
-// 20	status		
-// 21	kyc_data	
-// 22	kv	
-// 23	ev
-// 24	sv	
-// 25	profile_complete	
-// 26	ver_code	
-// 27	ver_code_send_at
-// 28	ts	
-// 29	tv	
-// 30	tsc		
-// 31	ban_reason		
-// 32	remember_token		
-// 33	deleted_at	
-// 34	created_at	
-// 35	updated_at

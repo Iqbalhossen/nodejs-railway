@@ -7,11 +7,22 @@ const { TransactionsWithdrawalReject } = require('../../../commonfile/Transactio
 const AdminWithdrawalMethodsView = async (req, res) => {
     try {
 
-        const data = await WithdrawalMethodsModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await WithdrawalMethodsModels.find().sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await WithdrawalMethodsModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
 
@@ -189,6 +200,12 @@ const AdminWithdrawalReject = async (req, res) => {
 const AdminWithdrawalAllView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const WithdrawalAcceptArraySum = await WithdrawalModels.aggregate([
             { $match: { Status: 1, } },
             { $group: { _id: {}, sum: { $sum: "$AmountWithVat" } } }
@@ -206,12 +223,18 @@ const AdminWithdrawalAllView = async (req, res) => {
         const WithdrawalRejectSum = parseFloat(`${WithdrawalRejectArraySum[0] ? WithdrawalRejectArraySum[0].sum : 0}`).toFixed(2);
         const WithdrawalPendingSum = parseFloat(`${WithdrawalPendingArraySum[0] ? WithdrawalPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const results = await WithdrawalModels.find();
+        const results = await WithdrawalModels.find().sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await WithdrawalModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
 
         res.status(201).json({
             success: true,
             message: "Withdrawal data",
             data: results,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             WithdrawalAcceptSum: WithdrawalAcceptSum,
             WithdrawalRejectSum: WithdrawalRejectSum,
             WithdrawalPendingSum: WithdrawalPendingSum,
@@ -227,6 +250,12 @@ const AdminWithdrawalAllView = async (req, res) => {
 const AdminWithdrawalPendingView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
 
         const WithdrawalPendingArraySum = await WithdrawalModels.aggregate([
             { $match: { Status: 0, } },
@@ -235,12 +264,17 @@ const AdminWithdrawalPendingView = async (req, res) => {
         
         const WithdrawalPendingSum = parseFloat(`${WithdrawalPendingArraySum[0] ? WithdrawalPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const results = await WithdrawalModels.find({ Status: 0 });
+        const results = await WithdrawalModels.find({ Status: 0 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await WithdrawalModels.find({ Status: 0 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             message: "Withdrawal data",
             data: results,
-            length: results.length,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             WithdrawalPendingSum,
         });
 
@@ -256,6 +290,12 @@ const AdminWithdrawalPendingView = async (req, res) => {
 const AdminWithdrawalAcceptView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
 
         const WithdrawalAcceptArraySum = await WithdrawalModels.aggregate([
             { $match: { Status: 1, } },
@@ -264,12 +304,17 @@ const AdminWithdrawalAcceptView = async (req, res) => {
 
         const WithdrawalAcceptSum = parseFloat(`${WithdrawalAcceptArraySum[0] ? WithdrawalAcceptArraySum[0].sum : 0}`).toFixed(2);
 
-        const results = await WithdrawalModels.find({ Status: 1 });
+        const results = await WithdrawalModels.find({ Status: 1 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await WithdrawalModels.find({ Status: 1 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             message: "Withdrawal data",
             data: results,
-            length: results.length,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             WithdrawalAcceptSum,
         });
 
@@ -285,6 +330,12 @@ const AdminWithdrawalAcceptView = async (req, res) => {
 const AdminWithdrawalRejectView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
 
         const WithdrawalPendingArraySum = await WithdrawalModels.aggregate([
             { $match: { Status: 2, } },
@@ -293,11 +344,17 @@ const AdminWithdrawalRejectView = async (req, res) => {
 
         const WithdrawalPendingSum = parseFloat(`${WithdrawalPendingArraySum[0] ? WithdrawalPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const results = await WithdrawalModels.find({ Status: 2 });
+        const results = await WithdrawalModels.find({ Status: 2 }).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await WithdrawalModels.find({ Status: 2 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             message: "Withdrawal data",
             data: results,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             length: results.length,
             WithdrawalPendingSum: WithdrawalPendingSum,
         });
@@ -312,6 +369,12 @@ const AdminWithdrawalRejectView = async (req, res) => {
 
 const AdminWithdrawalHistoryView = async (req, res) => {
     try {
+
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const old_id = req.params.id;
         const query = { user_id: old_id };
@@ -333,12 +396,18 @@ const AdminWithdrawalHistoryView = async (req, res) => {
         const WithdrawalRejectBalanceSum = parseFloat(`${WithdrawalRejectArraySum[0] ? WithdrawalRejectArraySum[0].sum : 0}`).toFixed(2);
         const WithdrawalPendingBalanceSum = parseFloat(`${WithdrawalPendingArraySum[0] ? WithdrawalPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const results = await WithdrawalModels.find(query);
+        const results = await WithdrawalModels.find(query).sort('-createdAt').skip(skip).limit(limit);;
+        const dataLength = await WithdrawalModels.find(query);
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
 
 
         res.status(201).json({
             success: true,
             data: results,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             WithdrawalAcceptBalanceSum,
             WithdrawalRejectBalanceSum,
             WithdrawalPendingBalanceSum

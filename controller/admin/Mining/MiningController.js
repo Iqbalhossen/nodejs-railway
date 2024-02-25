@@ -9,6 +9,12 @@ const fs = require('fs');
 const AdminMiningView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY');
 
@@ -20,12 +26,21 @@ const AdminMiningView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            );
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await MiningModels.find({
+                expired_time: {
+                    $gte: findDate,
+                }
+            });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
 
     } catch (error) {
@@ -212,6 +227,12 @@ const AdminMiningDelete = async (req, res) => {
 const AdminMiningExpiredView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY');
 
@@ -222,12 +243,21 @@ const AdminMiningExpiredView = async (req, res) => {
                         $lte: findDate,
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await MiningModels.find( {
+                expired_time: {
+                    $lte: findDate,
+                }
+            });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
 
     } catch (error) {
@@ -239,16 +269,24 @@ const AdminMiningExpiredView = async (req, res) => {
 const AdminMiningAllView = async (req, res) => {
     try {
 
-        const timeObject = new Date();
-        const findDate = moment(timeObject).format('MM-DD-YYYY');
+        let { page, limit } = req.query;
 
-        const data = await MiningModels.find().sort('-createdAt');
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+
+        const data = await MiningModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await MiningModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
 
     } catch (error) {
         console.log(error);
@@ -258,6 +296,12 @@ const AdminMiningAllView = async (req, res) => {
 
 const AdminUserMiningRunningView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
 
@@ -269,12 +313,23 @@ const AdminUserMiningRunningView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await UserMiningModels.find(
+                {
+                    expired_time: {
+                        $gte: findDate,
+                        // $lte: "2021-02-15",
+                    }
+                });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
 
     } catch (error) {
@@ -285,6 +340,12 @@ const AdminUserMiningRunningView = async (req, res) => {
 
 const AdminUserMiningCompleteView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
 
@@ -295,12 +356,21 @@ const AdminUserMiningCompleteView = async (req, res) => {
                         $lte: findDate,
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await UserMiningModels.find({
+                expired_time: {
+                    $lte: findDate,
+                }
+            });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
 
     } catch (error) {
@@ -311,11 +381,22 @@ const AdminUserMiningCompleteView = async (req, res) => {
 const AdminUserMiningAllView = async (req, res) => {
     try {
 
-        const data = await UserMiningModels.find().sort('-createdAt');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await UserMiningModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserMiningModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
 

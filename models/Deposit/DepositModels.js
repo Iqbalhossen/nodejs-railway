@@ -46,7 +46,9 @@ var DepositSchema = new mongoose.Schema({
          
     },
     
-});
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model('Deposit', DepositSchema);

@@ -1,7 +1,7 @@
 const express = require('express')
 const route = express.Router();
 
-const {CryptoView, MenuView, videosView, bounsView, NoticesView, SliderView, OurProductsView, TradeAppMView, CryptocurrenciesView, NewListingView, ChooseGFFEXView, OurProductsTitleView, CommunityView, GffexAppView, CommunityBtnView, StartThradeBtnView, SignUpToTradeBtnView, GffexAppBtnView, MenuViewBySlug, FooterView, HeaderView, NewsletterView, HomeSectionView, SubMenuViewByMenu, SocialSupportView } = require('../../controller/frontEnd/frontEndController');
+const {CryptoView, MenuView, videosView, bounsView, NoticesView, SliderView, OurProductsView, TradeAppMView, CryptocurrenciesView, NewListingView, ChooseGFFEXView, OurProductsTitleView, CommunityView, GffexAppView, CommunityBtnView, StartThradeBtnView, SignUpToTradeBtnView, GffexAppBtnView, MenuViewBySlug, FooterView, HeaderView, NewsletterView, HomeSectionView, SubMenuViewByMenu, SocialSupportView,  TestimonialView,  TestimonialTitleViewView } = require('../../controller/frontEnd/frontEndController');
  
 
 route.get('/crypto/currency/view',  CryptoView);
@@ -23,6 +23,8 @@ route.get('/signup/to/trade/button/view',  SignUpToTradeBtnView);
 route.get('/gffex/app/btn/view',  GffexAppBtnView);
 route.get('/gffex/app/btn/view',  GffexAppBtnView);
 route.get('/social/support/view',  SocialSupportView);
+route.get('/testimonial/view',  TestimonialView);
+route.get('/testimonial/title/view',  TestimonialTitleViewView);
 
 ////  dynamic menu
 

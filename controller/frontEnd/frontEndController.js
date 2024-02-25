@@ -22,6 +22,8 @@ const HeaderModels = require('../../models/setting/HeaderModels');
 const NewsletterModels = require('../../models/setting/NewsletterModels');
 const SubMenuModels = require('../../models/frontend/SubMenuModels');
 const SocialSupportModels = require('../../models/SocialSupport/SocialSupportModels');
+const TestimonialModels = require('../../models/Testimonial/TestimonialModels');
+const TestimonialTitleModels = require('../../models/Testimonial/TestimonialTitleModels');
 const { ObjectId } = require('mongodb');
 
 
@@ -42,11 +44,22 @@ const SocialSupportView = async (req, res) => {
 // videos View section 
 const CryptoView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const data = await CryptoCurrencyModels.find({Status:1});
+        const dataLength = await CryptoCurrencyModels.find({Status:1});
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
     } catch (error) {
@@ -85,12 +98,24 @@ const bounsView = async (req, res) => {
 // Notices View section 
 const NoticesView = async (req, res) => {
     try {
-        const data = await NoticesModel.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await NoticesModel.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await NoticesModel.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
     } catch (error) {
         console.log(error);
@@ -99,13 +124,23 @@ const NoticesView = async (req, res) => {
 // Slider View section 
 const SliderView = async (req, res) => {
     try {
-        const data = await SliderModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await SliderModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await SliderModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
     } catch (error) {
         console.log(error);
     }
@@ -113,11 +148,22 @@ const SliderView = async (req, res) => {
 // Our Products View section 
 const OurProductsView = async (req, res) => {
     try {
-        const data = await OurProductsModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await OurProductsModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await OurProductsModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
     } catch (error) {
@@ -227,11 +273,23 @@ const GffexAppView = async (req, res) => {
 //Community  View section 
 const CommunityBtnView = async (req, res) => {
     try {
-        const data = await CommunityBtn.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+
+        const data = await CommunityBtn.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await CommunityBtn.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data?.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
     } catch (error) {
@@ -284,12 +342,24 @@ const GffexAppBtnView = async (req, res) => {
 // Menu section 
 const MenuView = async (req, res) => {
     try {
-        const data = await MenuModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await MenuModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await MenuModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
     } catch (error) {
         console.log(error);
@@ -387,5 +457,32 @@ const SubMenuViewByMenu = async (req, res) => {
     }
 };
 
+// Testimonial  section 
+const TestimonialView = async (req, res) => {
+    try {
+        const data = await TestimonialModels.find().sort("-createdAt");
+        res.status(201).json({
+            success: true,
+            data: data,
+            length: data.length
+        });
 
-module.exports = {SocialSupportView, CryptoView,  MenuView, videosView, bounsView, NoticesView, SliderView, OurProductsView, TradeAppMView, CryptocurrenciesView, NewListingView, ChooseGFFEXView, OurProductsTitleView, CommunityView, GffexAppView, CommunityBtnView, StartThradeBtnView, SignUpToTradeBtnView, GffexAppBtnView, MenuViewBySlug, FooterView, HeaderView, NewsletterView, HomeSectionView, SubMenuViewByMenu };
+    } catch (error) {
+        console.log(error);
+    }
+};
+const TestimonialTitleViewView = async (req, res) => {
+    try {
+        const data = await TestimonialTitleModels.findOne();
+        res.status(201).json({
+            success: true,
+            data: data,
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+module.exports = {SocialSupportView, CryptoView,  MenuView, videosView, bounsView, NoticesView, SliderView, OurProductsView, TradeAppMView, CryptocurrenciesView, NewListingView, ChooseGFFEXView, OurProductsTitleView, CommunityView, GffexAppView, CommunityBtnView, StartThradeBtnView, SignUpToTradeBtnView, GffexAppBtnView, MenuViewBySlug, FooterView, HeaderView, NewsletterView, HomeSectionView, SubMenuViewByMenu, TestimonialView,  TestimonialTitleViewView};

@@ -6,14 +6,23 @@ const { ObjectId } = require('mongodb');
 
 const AdminAllConversationView = async (req, res) => {
     try {
-        const { id } = req.params;
-        const data = await ConversationModel.find().sort('-createdAt');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await ConversationModel.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await ConversationModel.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data,
-           
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
     } catch (error) {
         console.log(error);
     }
@@ -52,11 +61,22 @@ const AdminConversationView = async (req, res) => {
 
 const AdminPendingLiveChatView = async (req, res) => {
     try {
-        const data = await ConversationModel.find({status:0}).sort('-createdAt');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await ConversationModel.find({status:0}).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await ConversationModel.find({status:0});
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data,
-           
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
     } catch (error) {

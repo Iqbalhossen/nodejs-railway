@@ -8,18 +8,18 @@ const { ObjectId } = require('mongodb');
 const TradeLogStore = async (req, res) => {
     try {
         const data = req.body;
-      
+
         const thradeSettingData = await ThradeSettingModels.findOne({ _id: new ObjectId(data.thradeSetting_id) });
 
-        if(data?.thradeSetting_id === '' || data?.thradeSetting_id === undefined ){
+        if (data?.thradeSetting_id === '' || data?.thradeSetting_id === undefined) {
             res.status(201).json({
                 success: false,
                 message: `Please time select`,
             });
-        }else{
+        } else {
             const UserData = await userModels.findOne({ _id: new ObjectId(data.user_id) });
             const RemingBalanceSum = (parseFloat(UserData?.balance) - parseFloat(data?.amount));
-    
+
             if (RemingBalanceSum >= 0) {
                 console.log(data)
                 const timeObject = new Date();
@@ -41,28 +41,28 @@ const TradeLogStore = async (req, res) => {
                     Time: thradeSettingData?.Time,
                     Unit: thradeSettingData?.Unit,
                     profit: thradeSettingData?.Profit,
-    
+
                 }
-    
-              TransactionsTradeLog(RemingBalanceSum, storeData, UserData);
-    
-              const results =   await TradeLogModels.create(storeData);
+
+                TransactionsTradeLog(RemingBalanceSum, storeData, UserData);
+
+                const results = await TradeLogModels.create(storeData);
                 res.status(201).json({
                     success: true,
                     message: `Trade ${data?.HighLow}`,
                     data: results,
                 });
-    
+
             } else { ////   Balance low
                 res.status(400).json({
                     success: false,
                     message: `Insufficient balance`,
                 });
             }
-    
+
         }
 
-    
+
 
     } catch (error) {
         console.log(error);
@@ -73,8 +73,14 @@ const TradeLogStore = async (req, res) => {
 const TradeLogHistory = async (req, res) => {
     try {
         const { id } = req.params;
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         /// Available Balance data
-  
+
         const TradeLogWinBalanceArraySum = await TradeLogModels.aggregate([
             { $match: { user_id: id, Result: 'Win' } },
             { $group: { _id: {}, sum: { $sum: "$Result_Amount" } } }
@@ -103,17 +109,23 @@ const TradeLogHistory = async (req, res) => {
 
         const TradeLogSum = parseFloat(`${TradeLogArraySum[0] ? TradeLogArraySum[0].sum : 0}`);
 
-        const TradeLog = await TradeLogModels.find({user_id: id}).sort('-createdAt');
-
+        const data = await TradeLogModels.find({ user_id: id }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await TradeLogModels.find({ user_id: id });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: TradeLog,
-            TradeLogSum:TradeLogSum,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
+            TradeLogSum: TradeLogSum,
             TradeLogWin: TradeLogWinBalanceSum,
             TradeLogDraw: TradeLogDrawBalanceSum,
             TradeLogLoss: TradeLogLossBalanceSum,
-            length: TradeLog.length
         });
+
+
 
     } catch (error) {
         console.log(error);
@@ -124,12 +136,12 @@ const TradeLogHistory = async (req, res) => {
 const TradeLogSingleView = async (req, res) => {
     try {
         const { id } = req.params;
-        const query = { _id: new ObjectId(id) };      
+        const query = { _id: new ObjectId(id) };
         const data = await TradeLogModels.findOne(query)
         res.status(201).json({
             success: true,
             data,
-           
+
         });
 
     } catch (error) {
@@ -141,11 +153,11 @@ const TradeLogSingleView = async (req, res) => {
 const TradeLogLimitView = async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await TradeLogModels.find({user_id:id}).sort('-createdAt').limit(10);
+        const data = await TradeLogModels.find({ user_id: id }).sort('-createdAt').limit(10);
         res.status(201).json({
             success: true,
             data,
-           
+
         });
 
     } catch (error) {
@@ -156,4 +168,4 @@ const TradeLogLimitView = async (req, res) => {
 
 
 
-module.exports = { TradeLogStore, TradeLogHistory, TradeLogSingleView, TradeLogLimitView};
+module.exports = { TradeLogStore, TradeLogHistory, TradeLogSingleView, TradeLogLimitView };

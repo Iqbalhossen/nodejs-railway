@@ -53,6 +53,7 @@ const adminFixedDepositRoutes = require('./routes/admin/FixedDeposit/FixedDeposi
 const adminMiningRoutes = require('./routes/admin/Mining/MiningRoutes');
 const adminLoanRoutes = require('./routes/admin/Loan/LoanRoutes');
 const adminLiveChatsRoutes = require('./routes/admin/LiveChats/LiveChatsRoutes');
+const adminTestimonialRoutes = require('./routes/admin/Testimonial/TestimonialRoutes');
 
 
 ///////////// admin route 
@@ -78,6 +79,7 @@ app.use('/api/admin/fixed/deposit', adminFixedDepositRoutes);
 app.use('/api/admin/mining', adminMiningRoutes);
 app.use('/api/admin/loan', adminLoanRoutes);
 app.use('/api/admin/live/chat', adminLiveChatsRoutes);
+app.use('/api/admin/testimonial', adminTestimonialRoutes);
 
 
 
@@ -104,6 +106,7 @@ const UserTradeMarketsRoute = require('./routes/user/TradeMarkets/TradeMarketsRo
 const UserFixedDepositRoutes = require('./routes/user/FixedDeposit/FixedDepositRoutes');
 const UserMiningRoutes = require('./routes/user/Mining/MiningRoutes');
 const UserLoanRoutes = require('./routes/user/Loan/LoanRoutes');
+const UserTransactionRoutes = require('./routes/user/Transaction/TransactionRoutes');
 
 
 ///////////// frontEnd route 
@@ -121,6 +124,7 @@ app.use('/api/user/trade/market', UserTradeMarketsRoute);
 app.use('/api/user/fixed/deposit', UserFixedDepositRoutes);
 app.use('/api/user/mining', UserMiningRoutes);
 app.use('/api/user/loan', UserLoanRoutes);
+app.use('/api/user/transaction', UserTransactionRoutes);
 
 
 
@@ -145,8 +149,8 @@ const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
         // origin: "http://localhost:3000",
-        origin: ["https://gffex.xyz", "https://xenodochial-morning-90071.pktriot.net"],
-        default: "https://gffex.xyz"
+        origin: ["http://localhost:3000", "http://localhost:3001"],
+        default: "http://localhost:3000"
         // credentials: true,
     },
 });

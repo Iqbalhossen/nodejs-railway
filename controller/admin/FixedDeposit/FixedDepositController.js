@@ -8,6 +8,11 @@ const fs = require('fs');
 
 const AdminFixedDepositView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY');
@@ -20,13 +25,23 @@ const AdminFixedDepositView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
-
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await FixedDepositModels.find(
+                {
+                    expired_time: {
+                        $gte: findDate,
+                        // $lte: "2021-02-15",
+                    }
+                });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
     } catch (error) {
         console.log(error);
@@ -209,6 +224,11 @@ const AdminFixedDepositDelete = async (req, res) => {
 
 const AdminFixedDepositExpiredView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY');
@@ -220,12 +240,22 @@ const AdminFixedDepositExpiredView = async (req, res) => {
                         $lte: findDate,
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await FixedDepositModels.find(
+                {
+                    expired_time: {
+                        $lte: findDate,
+                    }
+                });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
 
     } catch (error) {
@@ -236,13 +266,23 @@ const AdminFixedDepositExpiredView = async (req, res) => {
 
 const AdminFixedDepositAllView = async (req, res) => {
     try {
-        const data = await FixedDepositModels.find().sort('-createdAt');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await FixedDepositModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await FixedDepositModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
 
     } catch (error) {
         console.log(error);
@@ -252,6 +292,12 @@ const AdminFixedDepositAllView = async (req, res) => {
 
 const AdminUserFixedDepositRunningView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
 
@@ -263,13 +309,23 @@ const AdminUserFixedDepositRunningView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
-
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await UserFixedDeposit.find(
+                {
+                    expired_time: {
+                        $gte: findDate,
+                        // $lte: "2021-02-15",
+                    }
+                });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
     } catch (error) {
         console.log(error);
@@ -279,6 +335,12 @@ const AdminUserFixedDepositRunningView = async (req, res) => {
 
 const AdminUserFixedDepositCompleteView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY, h:mm:ss a');
 
@@ -290,14 +352,22 @@ const AdminUserFixedDepositCompleteView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
-
-
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await UserFixedDeposit.find({
+                expired_time: {
+                    $lte: findDate,
+                    // $lte: "2021-02-15",
+                }
+            });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
     } catch (error) {
         console.log(error);
     }
@@ -305,15 +375,23 @@ const AdminUserFixedDepositCompleteView = async (req, res) => {
 
 const AdminUserFixedDepositAllView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
 
-        const data = await UserFixedDeposit.find().sort('-createdAt');
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await UserFixedDeposit.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserFixedDeposit.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
-
     } catch (error) {
         console.log(error);
     }

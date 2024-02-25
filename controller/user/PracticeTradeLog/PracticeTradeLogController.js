@@ -72,6 +72,11 @@ const PracticeTradeLogStore = async (req, res) => {
 const PracticeTradeLogHistory = async (req, res) => {
     try {
         const { id } = req.params;
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
         /// Available Balance data
 
         const TradeLogWinBalanceArraySum = await PracticeTradeLogModels.aggregate([
@@ -102,17 +107,24 @@ const PracticeTradeLogHistory = async (req, res) => {
 
         const TradeLogSum = parseFloat(`${TradeLogArraySum[0] ? TradeLogArraySum[0].sum : 0}`);
 
-        const TradeLog = await PracticeTradeLogModels.find({ user_id: id }).sort('-createdAt');
+        const data = await PracticeTradeLogModels.find({ user_id: id }).sort('-createdAt').skip(skip).limit(limit);
 
+        const dataLength = await PracticeTradeLogModels.find({ user_id: id });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: TradeLog,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             TradeLogSum: TradeLogSum,
             TradeLogWin: TradeLogWinBalanceSum,
             TradeLogDraw: TradeLogDrawBalanceSum,
             TradeLogLoss: TradeLogLossBalanceSum,
-            length: TradeLog.length
         });
+
+
 
     } catch (error) {
         console.log(error);

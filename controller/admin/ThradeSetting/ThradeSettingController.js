@@ -5,11 +5,22 @@ const { ObjectId } = require('mongodb');
 // Home Bouns Store section 
 const AdminThradeSettingView = async (req, res) => {
     try {
-        const data = await ThradeSettingModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await ThradeSettingModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await ThradeSettingModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length
+            length: dataLength.length,
+            page: page,
+            limit: limit,
+            pageCount
         });
 
 

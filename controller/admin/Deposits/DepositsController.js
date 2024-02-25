@@ -7,6 +7,11 @@ const { TransactionsDeposit } = require('../../../commonfile/Transactions/Transa
 
 const AdminDepositall = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const DepositAcceptArraySum = await DepositModels.aggregate([
             { $match: { Status: 1, } },
@@ -25,11 +30,17 @@ const AdminDepositall = async (req, res) => {
         const DepositRejectBalanceSum = parseFloat(`${DepositRejectArraySum[0] ? DepositRejectArraySum[0].sum : 0}`).toFixed(2);
         const DepositPendingBalanceSum = parseFloat(`${DepositPendingArraySum[0] ? DepositPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const data = await DepositModels.find();
+        const data = await DepositModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await DepositModels.find();
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
+
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             DepositAcceptBalanceSum,
             DepositRejectBalanceSum,
             DepositPendingBalanceSum,
@@ -42,6 +53,11 @@ const AdminDepositall = async (req, res) => {
 };
 const AdminDepositPending = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const DepositPendingArraySum = await DepositModels.aggregate([
             { $match: { Status: 0, } },
@@ -50,11 +66,17 @@ const AdminDepositPending = async (req, res) => {
 
         const DepositPendingBalanceSum = parseFloat(`${DepositPendingArraySum[0] ? DepositPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const data = await DepositModels.find({ Status: 0 });
+        const data = await DepositModels.find({ Status: 0 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await DepositModels.find({ Status: 0 });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
+
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             DepositPendingBalanceSum
         });
 
@@ -65,6 +87,12 @@ const AdminDepositPending = async (req, res) => {
 const AdminDepositAccept = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const DepositAcceptArraySum = await DepositModels.aggregate([
             { $match: { Status: 1, } },
             { $group: { _id: {}, sum: { $sum: "$AmountWithVat" } } }
@@ -72,11 +100,17 @@ const AdminDepositAccept = async (req, res) => {
 
         const DepositAcceptBalanceSum = parseFloat(`${DepositAcceptArraySum[0] ? DepositAcceptArraySum[0].sum : 0}`).toFixed(2);
 
-        const data = await DepositModels.find({ Status: 1 });
+        const data = await DepositModels.find({ Status: 1 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await DepositModels.find({ Status: 1 });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
+
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             DepositAcceptBalanceSum
         });
 
@@ -86,7 +120,11 @@ const AdminDepositAccept = async (req, res) => {
 };
 const AdminDepositReject = async (req, res) => {
     try {
+        let { page, limit } = req.query;
 
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const DepositRejectArraySum = await DepositModels.aggregate([
             { $match: { Status: 2, } },
@@ -96,11 +134,17 @@ const AdminDepositReject = async (req, res) => {
         const DepositRejectBalanceSum = parseFloat(`${DepositRejectArraySum[0] ? DepositRejectArraySum[0].sum : 0}`).toFixed(2);
 
 
-        const data = await DepositModels.find({ Status: 2 });
+        const data = await DepositModels.find({ Status: 2 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await DepositModels.find({ Status: 2 });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
+
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             DepositRejectBalanceSum
         });
 
@@ -148,6 +192,12 @@ const AdminDepositRejectUpdate = async (req, res) => {
 };
 const AdminDepositRejectsum = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         // ObjectId('6599aec53bfcec4e90943ff2'),
         const results = await DepositModels.aggregate([
             { $match: { Status: 1, user_id: '655f050cc50ed357a73003c1' } },
@@ -205,6 +255,12 @@ const AdminDepositSingleView = async (req, res) => {
 const AdminDepositDepositHistoryView = async (req, res) => {
     try {
 
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const old_id = req.params.id;
         const query = { user_id: old_id };
 
@@ -225,13 +281,19 @@ const AdminDepositDepositHistoryView = async (req, res) => {
         const DepositRejectBalanceSum = parseFloat(`${DepositRejectArraySum[0] ? DepositRejectArraySum[0].sum : 0}`).toFixed(2);
         const DepositPendingBalanceSum = parseFloat(`${DepositPendingArraySum[0] ? DepositPendingArraySum[0].sum : 0}`).toFixed(2);
 
-        const results = await DepositModels.find(query);
+        const results = await DepositModels.find(query).sort('-createdAt').skip(skip).limit(limit);
 
+        const dataLength = await DepositModels.find(query);
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
 
         res.status(201).json({
             success: true,
             message: "Deposts  successfully",
             data: results,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             DepositAcceptBalanceSum,
             DepositRejectBalanceSum,
             DepositPendingBalanceSum

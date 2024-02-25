@@ -9,6 +9,11 @@ var moment = require('moment');
 
 const UserMiningView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY');
@@ -20,11 +25,21 @@ const UserMiningView = async (req, res) => {
                         $gte: findDate,
                     }
                 }
-            ).sort('-createdAt');
+            ).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await MiningModels.find(
+            {
+                expired_time: {
+                    $gte: findDate,
+                }
+            });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
 
@@ -195,15 +210,23 @@ const UserMiningStore = async (req, res) => {
 
 const UserMiningHistroy = async (req, res) => {
     try {
+        let { page, limit } = req.query;
 
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
         const id = req.params.id;
-        const data = await UserMiningModels.find({user_id:id}).sort('-createdAt')
+        const data = await UserMiningModels.find({user_id:id}).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserMiningModels.find({user_id:id});
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
-
 
     } catch (error) {
         console.log(error);

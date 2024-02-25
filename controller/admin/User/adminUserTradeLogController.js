@@ -3,15 +3,23 @@ const TradeLogModels = require('../../../models/TradeLog/TradeLogModels');
 const { ObjectId } = require('mongodb');
 
 const AdminUserTradeLogView = async (req, res) => {
-    try {
+    try { 
+        let { page, limit } = req.query;
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
 
         const old_id = req.params.id;
         const query = { user_id: old_id };    
-        const data = await TradeLogModels.find(query);
+        const data = await TradeLogModels.find(query).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await TradeLogModels.find(query);
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
             data: data,
-            length: data.length
+            page: page,
+            limit: limit,
+            pageCount
         });
 
 

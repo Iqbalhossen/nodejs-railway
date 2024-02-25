@@ -51,7 +51,9 @@ var GffexAppBtnSchema = new mongoose.Schema({
     update_at:{
         type:String,
     },
-});
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model('GffexAppBtnModels', GffexAppBtnSchema);

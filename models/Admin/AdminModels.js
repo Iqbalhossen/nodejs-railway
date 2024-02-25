@@ -138,7 +138,9 @@ var AdminSchema = new mongoose.Schema({
         type:String,
     },
  
-});
+},
+{ timestamps: true }
+);
 
 
 //Export the model

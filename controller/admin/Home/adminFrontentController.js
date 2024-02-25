@@ -379,7 +379,7 @@ const NoticesDelete = async (req, res) => {
 
 // Notices section End
 
-
+// 1136 × 568 px
 // Slider section 
 const SliderStore = async (req, res) => {
     try {
@@ -391,7 +391,7 @@ const SliderStore = async (req, res) => {
         });
         const formatedName = req.file.originalname.split(' ').join('-');
         const fileName = `${Date.now()}-${formatedName}`
-        await sharp(req.file.buffer).resize(250, 120, { kernel: sharp.kernel.nearest }).toFile(`./public/data/uploads/${fileName}`);
+        await sharp(req.file.buffer).resize(1136, 568, { kernel: sharp.kernel.nearest }).toFile(`./public/data/uploads/${fileName}`);
         const storeData = { image_url: `public/data/uploads/${fileName}`, created_at: new Date() }
         await SliderModels.create(storeData);
         res.status(201).json({
@@ -435,7 +435,7 @@ const SliderUpdate = async (req, res) => {
         });
         const formatedName = req.file.originalname.split(' ').join('-');
         const fileName = `${Date.now()}-${formatedName}`
-        await sharp(req.file.buffer).resize(250, 120, { kernel: sharp.kernel.nearest }).toFile(`./public/data/uploads/${fileName}`);
+        await sharp(req.file.buffer).resize(1136, 568, { kernel: sharp.kernel.nearest }).toFile(`./public/data/uploads/${fileName}`);
         const existsImage = await SliderModels.findOne({ _id: new ObjectId(old_id) });
         fs.unlinkSync(existsImage.image_url);
 

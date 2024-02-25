@@ -11,11 +11,22 @@ const { ObjectId } = require('mongodb');
 const AdminAllUserView = async (req, res) => {
 
     try {
-        const data = await UserModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await UserModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
     } catch (error) {
@@ -57,11 +68,24 @@ const AdminUserViewByEmail = async (req, res) => {
 const AdminUserBanned = async (req, res) => {
 
     try {
-        const data = await UserModels.find({ status: 2 }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await UserModels.find({ status: 2 }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserModels.find({ status: 2 });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
+
 
     } catch (error) {
         console.log(error);
@@ -71,10 +95,22 @@ const AdminUserBanned = async (req, res) => {
 const AdminUseEmailUnverify = async (req, res) => {
 
     try {
-        const data = await UserModels.find({ is_verified: false }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        
+        const data = await UserModels.find({ is_verified: false }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserModels.find({ is_verified: false });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
     } catch (error) {
@@ -84,10 +120,22 @@ const AdminUseEmailUnverify = async (req, res) => {
 const AdminUseMobileUnverify = async (req, res) => {
 
     try {
-        const data = await UserModels.find({ mv: false }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        
+        const data = await UserModels.find({ mv: false }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserModels.find({ mv: false });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
     } catch (error) {
@@ -97,10 +145,22 @@ const AdminUseMobileUnverify = async (req, res) => {
 const AdminUseKYCUnverify = async (req, res) => {
 
     try {
-        const data = await UserModels.find({ kv: false }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        
+        const data = await UserModels.find({ kv: false }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserModels.find({ kv: false });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
     } catch (error) {
@@ -110,14 +170,28 @@ const AdminUseKYCUnverify = async (req, res) => {
 const AdminUseWithBalance = async (req, res) => {
 
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        
         const data = await UserModels.find({
             balance: { $gt: 0 } 
-           }).sort('-created_at');
-        res.status(201).json({
-            success: true,
-            data: data,
-        });
-
+           }).sort('-createdAt').skip(skip).limit(limit);
+           const dataLength = await UserModels.find({
+            balance: { $gt: 0 } 
+           });
+           const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+           res.status(201).json({
+               success: true,
+               data,
+               length: dataLength.length,
+               page,
+               limit,
+               pageCount
+           });
+   
     } catch (error) {
         console.log(error);
     }
@@ -125,10 +199,22 @@ const AdminUseWithBalance = async (req, res) => {
 const AdminUseKYCPending = async (req, res) => {
 
     try {
-        const data = await UserModels.find({ kyc_data: true }).sort('-created_at');
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        
+        const data = await UserModels.find({ kyc_data: true }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserModels.find({ kyc_data: true });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
     } catch (error) {
@@ -336,13 +422,26 @@ const AdminUserBannedByID = async (req, res) => {
 const AdminUserLoginHistory = async (req, res) => {
 
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        
         const old_id = req.params.id;
         const query = { _id: new ObjectId(old_id) };
-        const results = await UserLoginsModels.find(query);
+        const results = await UserLoginsModels.find(query).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserLoginsModels.find(query);
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: results,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
+
 
     } catch (error) {
         console.log(error);

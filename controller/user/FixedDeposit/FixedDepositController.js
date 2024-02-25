@@ -7,7 +7,11 @@ var moment = require('moment');
 
 const UserFixedDepositView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
 
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
         const timeObject = new Date();
         const findDate = moment(timeObject).format('MM-DD-YYYY');
 
@@ -19,13 +23,22 @@ const UserFixedDepositView = async (req, res) => {
                         // $lte: "2021-02-15",
                     }
                 }
-            ).sort('-createdAt');
-        res.status(201).json({
-            success: true,
-            data: data,
-            length: data.length
-        });
-
+            ).sort('-createdAt').skip(skip).limit(limit);
+            const dataLength = await FixedDepositModels.find( {
+                expired_time: {
+                    $gte: findDate,
+                    // $lte: "2021-02-15",
+                }
+            });
+            const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
+            res.status(201).json({
+                success: true,
+                data,
+                length: dataLength.length,
+                page,
+                limit,
+                pageCount,
+            });
 
     } catch (error) {
         console.log(error);
@@ -131,15 +144,25 @@ const UserFixedDepositStore = async (req, res) => {
 
 const UserFixedDepositStoreView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
         const id = req.params.id;
       
-        const data = await UserFixedDeposit.find({user_id: id}).sort('-createdAt');
-    
+        const data = await UserFixedDeposit.find({user_id: id}).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await UserFixedDeposit.find({user_id: id});
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            message: "Fixed deposit successfull",
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
     } catch (error) {
         console.log(error);

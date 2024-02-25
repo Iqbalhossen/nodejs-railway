@@ -7,8 +7,14 @@ const { ObjectId } = require('mongodb');
 
 const WithdrawalView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const id = req.params.id;
-        const data = await WithdrawalModels.find({user_id:id}).sort('-Created_At');
+       
         const WithdrawalAcceptSum = await WithdrawalModels.aggregate([
             { $match: { Status: 1, user_id: id } },
             { $group: { _id: {}, sum: { $sum: "$AmountWithVat" } } }
@@ -21,14 +27,21 @@ const WithdrawalView = async (req, res) => {
             { $match: { Status: 1, user_id: id } },
             { $group: { _id: {}, sum: { $sum: "$AmountWithVat" } } }
         ]);
+        const data = await WithdrawalModels.find({user_id:id}).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await WithdrawalModels.find({user_id:id});
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
             WithdrawalAcceptSum: WithdrawalAcceptSum,
             WithdrawalRejectSum: WithdrawalRejectSum,
             WithdrawalPendingSum: WithdrawalPendingSum,
-            length: data.length
         });
+
 
 
     } catch (error) {

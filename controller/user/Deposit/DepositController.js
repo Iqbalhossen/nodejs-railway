@@ -8,14 +8,23 @@ const { ObjectId } = require('mongodb');
 const UserDepositAllView = async (req, res) => {
     try {
         const user_id = req.params.user_id;
+        let { page, limit } = req.query;
 
-        const UserDepositData = await DepositModels.find({ user_id: user_id }).sort('-Created_At');
-
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+        const data = await DepositModels.find({ user_id: user_id }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await DepositModels.find({ user_id: user_id });
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: UserDepositData,
-            length: UserDepositData.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
 
     } catch (error) {

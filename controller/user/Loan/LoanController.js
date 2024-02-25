@@ -59,13 +59,25 @@ const UserLoanStore = async (req, res) => {
 
 const UserLoanHistory = async (req, res) => {
     try {
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
         const user_id = req.params.id;
-        const data = await LoanModels.find({user_id:user_id}).sort('-createdAt')
+        const data = await LoanModels.find({user_id:user_id}).sort('-createdAt').skip(skip).limit(limit);
+         const dataLength = await LoanModels.find({user_id:user_id});
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
+ 
 
 
     } catch (error) {

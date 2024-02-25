@@ -24,7 +24,9 @@ var SubMenuSchema = new mongoose.Schema({
     update_at:{
         type:String,
     },
-});
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model('SubMenuModel', SubMenuSchema);

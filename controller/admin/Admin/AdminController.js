@@ -11,12 +11,22 @@ const { adminSendForgetPasswordEmail } = require('../../../commonfile/email/User
 // Home Bouns Store section 
 const AdminRoleView = async (req, res) => {
     try {
+        let { page, limit } = req.query;
 
-        const data = await AdminModels.find().sort('-created_at');
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await AdminModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await AdminModels.find();
+        const pageCount = Math.ceil( parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount,
         });
 
 

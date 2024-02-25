@@ -31,7 +31,7 @@ schedule.scheduleJob("*/01 * * * * *", function () {
       const cronTime = new Date().toISOString().
         replace(/T/, ' ').
         replace(/\..+/, '');
-      const data = await PracticeTradeLogModels.find({ OutTime: cronTime });
+      const data = await PracticeTradeLogModels.find({ OutTime: cronTime, Status:0 });
       // console.log(`running a task every 1 second ${cronTime}`)
 
 

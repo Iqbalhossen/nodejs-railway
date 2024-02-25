@@ -8,8 +8,11 @@ const NoticesModel = require('../../models/frontend/noticesModel');
 const NewListingModels = require('../../models/frontend/NewListingModels');
 const ChooseGFFEXModels = require('../../models/frontend/ChooseGFFEXModels');
 const OurProductsTitle = require('../../models/frontend/OurProductsTitle');
+const OurProductsModels = require('../../models/frontend/OurProductsModels');
 const CommunityModels = require('../../models/frontend/CommunityModels');
+const CommunityBtn = require('../../models/frontend/CommunityBtn');
 const GffexAppModels = require('../../models/frontend/GffexAppModels');
+const GffexAppBtn = require('../../models/frontend/GffexAppBtn');
 const StartThradeBtnModels = require('../../models/frontend/StartThradeBtnModels');
 const SignUpToTradeBtnModel = require('../../models/frontend/SignUpToTradeBtnModel');
 const { ObjectId } = require('mongodb');
@@ -85,27 +88,33 @@ const MenuSingleItemView = async (req, res) => {
 
         if (name === 'Our Products Section') {
             const data = await OurProductsTitle.findOne();
+            const OurProductsData = await OurProductsModels.find();
             res.status(201).json({
                 success: true,
-                OurProductsData: data,
+                OurProductsTitleData: data,
+                OurProductsData: OurProductsData,
                 message: 'Our Products Section',
             });
         }
 
         if (name === 'Community Section') {
             const data = await CommunityModels.findOne();
+            const CommunityBtnData = await CommunityBtn.find();
             res.status(201).json({
                 success: true,
                 CommunityData: data,
+                CommunityBtn:CommunityBtnData,
                 message: 'Community Section',
             });
         }
 
         if (name === 'Gffex App Section') {
             const data = await GffexAppModels.findOne();
+            const GffexAppBtnData = await GffexAppBtn.findOne();
             res.status(201).json({
                 success: true,
                 GffexAppData: data,
+                GffexAppBtn:GffexAppBtnData,
                 message: 'Gffex App Section',
             });
         }

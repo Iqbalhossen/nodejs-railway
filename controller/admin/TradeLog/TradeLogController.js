@@ -4,11 +4,22 @@ const { ObjectId } = require('mongodb');
 
 const AdminTradeLogAll = async (req, res) => {
     try {
-        const data = await TradeLogModels.find();
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await TradeLogModels.find().sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await TradeLogModels.find();
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
 
@@ -19,11 +30,23 @@ const AdminTradeLogAll = async (req, res) => {
 
 const AdminTradeLogWin = async (req, res) => {
     try {
-        const data = await TradeLogModels.find({Result:'Win'});
+
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await TradeLogModels.find({ Result: 'Win' }).sort('-createdAt').skip(skip).limit(limit);
+       const dataLength = await TradeLogModels.find({ Result: 'Win' });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
 
 
@@ -36,12 +59,25 @@ const AdminTradeLogWin = async (req, res) => {
 
 const AdminTradeLogLoss = async (req, res) => {
     try {
-        const data = await TradeLogModels.find({Result:'Loss'});
+
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await TradeLogModels.find({ Result: 'Loss' }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await TradeLogModels.find({ Result: 'Loss' });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
+
 
 
     } catch (error) {
@@ -51,13 +87,23 @@ const AdminTradeLogLoss = async (req, res) => {
 
 const AdminTradeLogDraw = async (req, res) => {
     try {
-        const data = await TradeLogModels.find({Result:'Draw'});
+        let { page, limit } = req.query;
+
+        const skip = ((page - 1) * 10);
+        if (!page) page = 1;
+        if (!limit) limit = 10;
+
+        const data = await TradeLogModels.find({ Result: 'Draw' }).sort('-createdAt').skip(skip).limit(limit);
+        const dataLength = await TradeLogModels.find({ Result: 'Draw' });
+        const pageCount = Math.ceil(parseFloat(dataLength.length) / parseFloat(limit));
         res.status(201).json({
             success: true,
-            data: data,
-            length: data.length
+            data,
+            length: dataLength.length,
+            page,
+            limit,
+            pageCount
         });
-
 
     } catch (error) {
         console.log(error);

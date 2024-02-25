@@ -12,7 +12,9 @@ let NewsletterSchema = new mongoose.Schema({
     },
    
     
-});
+},
+{ timestamps: true }
+);
 
 
 module.exports = mongoose.model('Newsletter', NewsletterSchema);
